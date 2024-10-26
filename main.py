@@ -3,8 +3,7 @@ from data_processing import save_data
 
 def main():
     region = "americas"
-    summoner_name = "FatKidsEzToKite"
-
+    summoner_name = input("Please enter your Summoner Name: ")
     match_data = retrieve_match_data(region, summoner_name)
 
     save_data(match_data, 'match_history.csv')
