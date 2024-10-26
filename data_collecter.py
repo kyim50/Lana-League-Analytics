@@ -11,5 +11,10 @@ def get_match_history(match_region, summoner_puuid, count=10):
 
 def retrieve_match_data(region, summoner_name):
     summoner_info = get_summoner_by_name(region, summoner_name)
-    match_history = get_match_history("america", summoner_info["puuid"])
+    match_history = get_match_history("americas", summoner_info["puuid"])
     return match_history
+
+def get_champion_data():
+    versions = watcher.data_dragon.versions_for_regions("americas")
+    latest_version = versions["n"]["champion"]
+    champion_data = watcher.data_dragon.champions(latest_version, locale ="en_US")
