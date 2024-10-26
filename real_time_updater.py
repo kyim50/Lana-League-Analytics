@@ -11,6 +11,6 @@ def get_live_match_data(region, summoner_id):
     
 def calculate_win_probability(team_composition, current_game_state):
     base_probability = 0.5
-    if current_game_state["gold_lead"] > 3000:
+    if current_game_state["gold_lead"] > 2000:
         base_probability += 0.1
     return base_probability
