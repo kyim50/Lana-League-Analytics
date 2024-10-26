@@ -23,10 +23,23 @@ def get_summoner_puuid_by_riot_id(game_name, tag_line, region='americas'):
         print(f"Request error: {err}")
     return None
 
-def get_match_history(region, puuid, count=10):
+def get_match_history(region, puuid, count=100):
     try:
         match_history = watcher.match.matchlist_by_puuid(region, puuid, count=count)
-        return match_history
+        match_details = []
+        for match_id in match_history:
+            match_data = watcher.match.by_id(region, match_id)
+            # Extract relevant details from the match data
+            for participant in match_data['info']['participants']:
+                if participant['puuid'] == puuid:  # Find the player in the match
+                    match_details.append({
+                        'win': participant['win'],
+                        'duration': match_data['info']['gameDuration'],
+                        'kills': participant['kills'],
+                        'deaths': participant['deaths'],
+                        'assists': participant['assists'],
+                    })
+        return match_details
     except ApiError as err:
         print(f"Failed to retrieve match history: {err}")
         return None
@@ -41,4 +54,3 @@ def retrieve_match_data(game_name, tag_line):
     
     match_history = get_match_history("americas", puuid)
     return match_history
-
