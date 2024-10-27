@@ -9,9 +9,13 @@ def save_data(data, filename):
 def load_data(file_path):
     return pd.read_csv(file_path)
 
+#Calculaing winrate and duration of matches
 def calculate_metrics(match_data):
     win_rate = match_data['win'].mean() * 100
-    average_duration = match_data['duration'].mean()
+#Converting seconds to minutes
+    average_duration = (match_data['duration'].mean())/60
+#Rounding to 2 decimal places
+    average_duration = round(average_duration,2)
     return win_rate, average_duration
 
 def feature_engineering(match_data):
