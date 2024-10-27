@@ -23,7 +23,7 @@ def get_summoner_puuid_by_riot_id(game_name, tag_line, region='americas'):
         print(f"Request error: {err}")
     return None
 
-def get_match_history(region, puuid, count=10):
+def get_match_history(region, puuid, count):
     try:
         match_history = watcher.match.matchlist_by_puuid(region, puuid, count=count)
         match_details = []
@@ -44,15 +44,15 @@ def get_match_history(region, puuid, count=10):
         print(f"Failed to retrieve match history: {err}")
         return None
 
-def retrieve_match_data(game_name, tag_line):
+def retrieve_match_data(region, game_name, tag_line , count):
     print(f"Requesting summoner data for '{game_name}#{tag_line}'")
-    puuid = get_summoner_puuid_by_riot_id(game_name, tag_line)
     
-    if not puuid:
+    
+    if not game_name:
         print("Failed to retrieve PUUID for summoner.")
         return None
     
-    match_history = get_match_history("americas", puuid)
-    return match_history
-
-
+    match_data = get_match_history(region, game_name, tag_line, count)
+    if match_data is None:
+        print("No match data retrieved.")
+        return None

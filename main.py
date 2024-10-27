@@ -9,8 +9,18 @@ def main():
     game_name = input("Enter the summoner name: ")
     tag_line = input("Enter the tag line: ")
 
+    while True:
+        try:
+            count = int(input("Enter the number of matches you want to retrieve: "))
+            if count > 0:  # Ensure the count is positive
+                break
+            else:
+                print("Please enter a positive integer.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
     # Retrieve match data
-    match_data = retrieve_match_data(game_name, tag_line)
+    match_data = retrieve_match_data(region, game_name, tag_line , count)
     
     if match_data is None:
         print("No match data retrieved.")
