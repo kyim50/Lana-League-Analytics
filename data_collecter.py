@@ -305,3 +305,23 @@ def retrieve_match_data(game_name, tag_line, count):
 
     match_history = get_match_history("americas", puuid, count)
     return match_history
+
+#Function to display champion_stats
+def display_champion_stats(game_name, tag_line):
+    """Display champion stats with improved formatting."""
+    print("\nFetching champion mastery and win rate data...")
+    stats = get_champion_stats(game_name, tag_line)
+    
+    if stats:
+        print("\nTop 5 Mastery Champions (sorted by win rate):")
+        print("-" * 100)
+        print(f"{'Champion':<20} {'Level':<8} {'Mastery Points':<15} {'Win Rate':<12} {'Games':<8} {'KDA':<8}")
+        print("-" * 100)
+        
+        for stat in stats:
+            print(f"{stat['championName']:<20} "
+                  f"{stat['championLevel']:<8} "
+                  f"{stat['championPoints']:<15} "
+                  f"{stat['win_rate']:.1f}%{' ':>6} "
+                  f"{stat['games_analyzed']:<8} "
+                  f"{stat['kda']:.2f}")
