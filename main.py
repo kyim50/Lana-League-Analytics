@@ -41,7 +41,7 @@ def main():
 
     # Display champion stats
     print("\nRetrieving champion mastery and win rate data...")
-    display_champion_stats(game_name, tag_line)
+    # display_champion_stats(game_name, tag_line)
 
 if __name__ == "__main__":
     main()
