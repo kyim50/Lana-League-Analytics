@@ -42,6 +42,25 @@ def get_summoner_id_by_puuid(puuid, region='na1'):
         print(f"Request error: {err}")
     return None
 
+def get_live_game_data(puuid, region='na1'):
+    url = f"https://{region}.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/{puuid}"
+    headers = {"X-Riot-Token": API_KEY}
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        return response.json()  # Return live game data
+    except requests.exceptions.HTTPError as err:
+        if response.status_code == 404:
+            print("Summoner is not currently in a game.")
+        elif response.status_code == 401:
+            print("Unauthorized - check your API key.")
+        else:
+            print(f"HTTP error occurred: {err}")
+    except requests.exceptions.RequestException as err:
+        print(f"Request error: {err}")
+    return None
+
 def get_match_history(region, puuid, count=10):
     try:
         match_history = watcher.match.matchlist_by_puuid(region, puuid, count=count)
@@ -83,6 +102,14 @@ def retrieve_match_data(game_name, tag_line, count):
         print(f"Summoner ID: {summoner_id}")
     else:
         print("Failed to retrieve summoner ID.")
+
+    # Check if the player is in-game
+    in_game_data = get_live_game_data(puuid)
+    if in_game_data:
+        print("Player is currently in-game! - ")
+        print(in_game_data)  # You can format this output as needed
+    else:
+        print("Player is not in-game. Retrieving match history...")
 
     match_history = get_match_history("americas", puuid, count)
     return match_history
