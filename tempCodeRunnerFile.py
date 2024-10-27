@@ -1,14 +1,15 @@
-
-from data_collecter import retrieve_match_data
+from data_collecter import retrieve_match_data, get_champion_stats,display_champion_stats
 from data_processing import save_data, load_data, calculate_metrics
-from visualization import plot_champion_performance, plot_win_rate
+
+
+
+    
 
 def main():
     # Prompt for user inputs
     region = input("Enter the region (e.g., na1): ")
     game_name = input("Enter the summoner name: ")
     tag_line = input("Enter the tag line: ")
-
 
     while True:
         try:
@@ -38,12 +39,9 @@ def main():
     print(f"Win Rate: {win_rate:.2f}%")
     print(f"Average Game Duration: {average_duration} minutes")
 
-    # Optional: Call visualization functions if desired
-    # plot_champion_performance(loaded_data)
-    # plot_win_rate(loaded_data)
-
-    # Start the real-time game updater
-    # print("\nStarting real-time game state updater...\n")
+    # Display champion stats
+    print("\nRetrieving champion mastery and win rate data...")
+    # display_champion_stats(game_name, tag_line)
 
 if __name__ == "__main__":
-    main() 
+    main()
