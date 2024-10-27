@@ -63,7 +63,8 @@ def get_match_history(region, puuid, count=10):
         print(f"Failed to retrieve match history: {err}")
         return None
 
-def retrieve_match_data(game_name, tag_line):
+def retrieve_match_data(game_name, tag_line, count):
+   
     print(f"Requesting summoner data for '{game_name}#{tag_line}'")
     puuid = get_summoner_puuid_by_riot_id(game_name, tag_line)
     
@@ -83,5 +84,5 @@ def retrieve_match_data(game_name, tag_line):
     else:
         print("Failed to retrieve summoner ID.")
 
-    match_history = get_match_history("americas", puuid)
+    match_history = get_match_history("americas", puuid, count)
     return match_history
