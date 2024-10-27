@@ -10,7 +10,7 @@ def load_data(file_path):
     return pd.read_csv(file_path)
 
 def calculate_metrics(match_data):
-    win_rate = match_data['win'].mean() * 19
+    win_rate = match_data['win'].mean() * 100
     average_duration = match_data['duration'].mean()
     return win_rate, average_duration
 

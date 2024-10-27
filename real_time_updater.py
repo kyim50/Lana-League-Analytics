@@ -1,48 +1,71 @@
-import numpy as np
-from riotwatcher import LolWatcher
-from config import API_KEY
+import requests
+import urllib3
 
-watcher = LolWatcher(API_KEY)
+# Suppress the InsecureRequestWarning
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
-def get_live_match_data(region, summoner_id):
+def get_live_client_data(endpoint):
+    url = f"https://127.0.0.1:2999/liveclientdata/{endpoint}"
     try:
-        match_data = watcher.spectator.by_summoner(region, summoner_id)
+        response = requests.get(url, verify=False)  # Disable verification for local requests
+        response.raise_for_status()  # Raise an error for bad responses
+        return response.json()  # Return JSON data if successful
+    except requests.exceptions.RequestException as e:
+        print(f"HTTP error occurred: {e}")
+        return None  # Return None if there was an error
+
+def get_players_data():
+    # Fetch the player data
+    players_data = get_live_client_data("activeplayer")
+    if players_data:
+        return players_data  # Return data for the current player
+
+    # If active player data isn't found, attempt to get player data by riot ID
+    players = get_live_client_data("allplayers")
+    if players:
+        return players  # Return all player data if available
+    return None
+
+def display_player_data(player):
+    print("Player Data Structure:", player)  # Debugging output to check the player data structure
+
+    # Display comprehensive player information
+    try:
+        print(f"Player: {player['summonerName']}")
+        print(f"Riot ID: {player['riotId']}")
+        print(f"Champion: {player.get('abilities', {}).get('Q', {}).get('displayName', 'N/A')}")
+        print(f"Level: {player['level']}")
+        print(f"Current Gold: {player['currentGold']}")
+        print(f"Health: {player['championStats']['currentHealth']}/{player['championStats']['maxHealth']}")
+        print(f"Attack Damage: {player['championStats']['attackDamage']}")
+        print(f"Armor: {player['championStats']['armor']}")
+        print(f"Magic Resist: {player['championStats']['magicResist']}")
+        print(f"Movement Speed: {player['championStats']['moveSpeed']}")
+        print(f"Abilities: {[ability['displayName'] for ability in player['abilities'].values()]}")
+        print(f"Runes: {[rune['displayName'] for rune in player['fullRunes']['generalRunes']]}")
         
-        # Extract participants
-        team_composition = match_data['participants']
-        current_game_state = {
-            "gold_lead": match_data['gold_lead'],
-            "kills": sum(player['kills'] for player in team_composition),
-            "deaths": sum(player['deaths'] for player in team_composition),
-            "assists": sum(player['assists'] for player in team_composition),
-            "objectives": {
-                "towers": sum(player['tower_kills'] for player in team_composition),
-                "dragons": sum(player['dragon_kills'] for player in team_composition),
-                "barons": sum(player['baron_kills'] for player in team_composition),
-            },
-            "cs": sum(player['cs'] for player in team_composition),
-            "avg_level": np.mean([player['champion_level'] for player in team_composition]),
-            "vision_score": sum(player['vision_score'] for player in team_composition),
-        }
-        return team_composition, current_game_state
-    except Exception as e:
-        print(f"Error fetching match data: {e}")
-        return None, None
+        # Fetch items safely
+        items_data = get_live_client_data(f'playeritems?riotId={player["riotId"]}')
+        if items_data:
+            print(f"Items: {[item['displayName'] for item in items_data]}")
+        else:
+            print("Items data not available.")
 
-def calculate_win_probability(team_composition, current_game_state):
-    base_probability = 0.5
-    
-    # Factors contributing to win probability
-    if current_game_state["gold_lead"] > 2000:
-        base_probability += 0.1
-    if current_game_state["kills"] > current_game_state["deaths"]:
-        base_probability += 0.05  # Positive KDA
-    if current_game_state["objectives"]["dragons"] > 1:
-        base_probability += 0.05  # Objective advantage
-    if current_game_state["vision_score"] > 30:
-        base_probability += 0.05  # Vision control
+        print("----------")
+    except KeyError as e:
+        print(f"KeyError: {e} - Player data may be missing some fields.")
 
-    # Normalize to ensure probability remains between 0 and 1
-    return min(max(base_probability, 0), 1)
+def main():
+    players_data = get_players_data()
 
+    if players_data:
+        if isinstance(players_data, list):
+            for player in players_data:
+                display_player_data(player)
+        else:
+            display_player_data(players_data)
+    else:
+        print("Failed to retrieve player data.")
+
+if __name__ == "__main__":
+    main()
