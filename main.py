@@ -1,13 +1,14 @@
 from data_collecter import retrieve_match_data
 from data_processing import save_data, load_data, calculate_metrics
 from visualization import plot_champion_performance, plot_win_rate
+from real_time_updater import display_game_state  # Import the real-time updater function
 
 def main():
     # Prompt for user inputs
     region = input("Enter the region (e.g., na1): ")
     game_name = input("Enter the summoner name: ")
     tag_line = input("Enter the tag line: ")
-    
+
     # Retrieve match data
     match_data = retrieve_match_data(game_name, tag_line)
     
@@ -26,9 +27,13 @@ def main():
     print(f"Win Rate: {win_rate:.2f}%")
     print(f"Average Game Duration: {average_duration} seconds")
 
-    # Here you can call visualization functions if desired
+    # Optional: Call visualization functions if desired
     # plot_champion_performance(loaded_data)
     # plot_win_rate(loaded_data)
+
+    # Start the real-time game updater
+    print("\nStarting real-time game state updater...\n")
+    display_game_state(game_name, tag_line, region)  # This will keep running to update the game state
 
 if __name__ == "__main__":
     main()
