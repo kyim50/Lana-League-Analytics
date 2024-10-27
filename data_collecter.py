@@ -273,6 +273,7 @@ def get_match_history(region, puuid, count=10):
         print(f"Failed to retrieve match history: {err}")
         return None
 
+#Function to take a summoners natch data
 def retrieve_match_data(game_name, tag_line, count):
     """Retrieve all match-related data for a player."""
     print(f"Requesting summoner data for '{game_name}#{tag_line}'")
