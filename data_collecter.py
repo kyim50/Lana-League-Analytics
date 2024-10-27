@@ -1,6 +1,7 @@
 import requests
 from riotwatcher import LolWatcher, ApiError
 from config import API_KEY
+from champion_mapping import champion_mapping
 
 watcher = LolWatcher(API_KEY)
 
@@ -106,10 +107,22 @@ def retrieve_match_data(game_name, tag_line, count):
     # Check if the player is in-game
     in_game_data = get_live_game_data(puuid)
     if in_game_data:
-        print("Player is currently in-game! - ")
-        print(in_game_data)  # You can format this output as needed
+        print("Player is currently in-game!")
+        
+    in_game_data = get_live_game_data(puuid)
+    if in_game_data:
+        print("Player is currently in-game!")
+
+        for participant in in_game_data['participants']:
+            riot_id = participant['riotId']
+            champion_id = participant['championId']
+            champion_name = champion_mapping.get(champion_id, "Unknown Champion")  # Get champion name
+
+            print(f"{riot_id} - Champion: {champion_name}")
+
     else:
-        print("Player is not in-game. Retrieving match history...")
+            print("Player is not in-game. Retrieving match history...")
+        
 
     match_history = get_match_history("americas", puuid, count)
     return match_history
