@@ -43,7 +43,7 @@ def main():
     # plot_win_rate(loaded_data)
 
     # Start the real-time game updater
-    print("\nStarting real-time game state updater...\n")
+    # print("\nStarting real-time game state updater...\n")
 
 if __name__ == "__main__":
     main() 
