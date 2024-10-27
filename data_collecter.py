@@ -1,6 +1,8 @@
 import requests
 from riotwatcher import LolWatcher, ApiError
 from config import API_KEY
+from collections import defaultdict
+
 
 watcher = LolWatcher(API_KEY)
 
