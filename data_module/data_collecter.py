@@ -2,7 +2,7 @@ import requests
 import concurrent.futures
 from riotwatcher import LolWatcher, ApiError
 from collections import defaultdict
-from config import API_KEY
+from config.config import API_KEY
 
 watcher = LolWatcher(API_KEY)
 

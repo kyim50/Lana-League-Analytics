@@ -1,5 +1,5 @@
-from data_collecter import retrieve_match_data, get_champion_stats,display_champion_stats
-from data_processing import save_data, load_data, calculate_metrics
+from data_module.data_collecter import retrieve_match_data, get_champion_stats,display_champion_stats
+from data_module.data_processing import save_data, load_data, calculate_metrics
 
 
 

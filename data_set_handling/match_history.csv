@@ -1,6 +1,6 @@
 win,duration,kills,deaths,assists,championId,role,vision_score
-True,2133,5,2,13,421,TOP,5
 True,1504,9,1,7,421,JUNGLE,15
 False,1288,7,18,24,164,,0
+False,172,0,0,0,421,JUNGLE,0
+False,2274,12,5,11,421,JUNGLE,17
 True,851,9,9,18,31,,0
-False,1157,2,3,0,421,TOP,8

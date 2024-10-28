@@ -23,7 +23,7 @@ df['championName'] = df.apply(map_champions, axis=1)
 df = df[['win', 'duration', 'kills', 'deaths', 'assists', 'championId', 'championName', 'role', 'vision_score']]
 
 # Create dummy variables for roles
-roles = ['TOP', 'JUNGLE', 'MID', 'ADC', 'SUPPORT']
+roles = ['TOP', 'JUNGLE', 'MID', 'BOTTOM', 'SUPPORT']
 for role in roles:
     df[f'role_{role}'] = (df['role'] == role).astype(int)
 
